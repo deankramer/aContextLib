@@ -43,7 +43,7 @@ public class LocationWeatherContext extends PullObserver {
 
     public LocationWeatherContext(Context c) {
         super(c, 2000, "LocationWeatherContext");
-        mWeatherSource = new OpenWeatherMapSource();
+        mWeatherSource = new OpenWeatherMapSource(c);
     }
 
     public LocationWeatherContext(Context c, String place) {

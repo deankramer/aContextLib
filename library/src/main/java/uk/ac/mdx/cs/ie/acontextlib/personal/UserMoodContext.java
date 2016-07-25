@@ -18,7 +18,6 @@ package uk.ac.mdx.cs.ie.acontextlib.personal;
 
 import android.content.Context;
 
-import uk.ac.mdx.cs.ie.acontextlib.IContextReceiver;
 import uk.ac.mdx.cs.ie.acontextlib.PullObserver;
 import uk.ac.mdx.cs.ie.acontextlib.UIEvent;
 
@@ -29,8 +28,8 @@ import uk.ac.mdx.cs.ie.acontextlib.UIEvent;
  */
 public class UserMoodContext extends PullObserver {
 
-    public UserMoodContext(Context c, IContextReceiver cr) {
-        super(c, cr, 1800000, "UserMoodContext");
+    public UserMoodContext(Context c) {
+        super(c, 1800000, "UserMoodContext");
     }
 
     public enum Mood {HAPPY, SAD, UNKNOWN}
