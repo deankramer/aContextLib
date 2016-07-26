@@ -17,13 +17,16 @@
 package uk.ac.mdx.cs.ie.acontextlib.sample;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import java.util.Map;
 
 import uk.ac.mdx.cs.ie.acontextlib.IContextReceiver;
+import uk.ac.mdx.cs.ie.acontextlib.hardware.LightContext;
 
 /**
  * Sample Activity to demonstrate context components.
@@ -32,10 +35,20 @@ import uk.ac.mdx.cs.ie.acontextlib.IContextReceiver;
  */
 public class MainActivity extends Activity implements IContextReceiver {
 
+    private LightContext mLightContext;
+    private Context mContext;
+    private TextView mLightLevel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mLightLevel = (TextView) findViewById(R.id.txtLight);
+
+        mContext = getApplicationContext();
+        mLightContext = new LightContext(mContext);
+
+        mLightContext.addContextReceiver(this);
     }
 
     @Override
@@ -65,23 +78,32 @@ public class MainActivity extends Activity implements IContextReceiver {
     }
 
     private void startContexts() {
-
+        mLightContext.start();
     }
 
     private void stopContexts() {
+        mLightContext.stop();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        startContexts();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        stopContexts();
     }
 
     //Context Receiver Implementations
 
     @Override
     public void newContextValue(String name, long value) {
-
+        if (name.equals("sensor.light_lumens")) {
+            mLightLevel.setText(String.valueOf(value));
+        }
     }
 
     @Override
