@@ -17,7 +17,7 @@
 package uk.ac.mdx.cs.ie.acontextlib;
 
 /**
- * An class interface to more easily deal with POSEIDON Context Manager method invocation.
+ * An class interface to more easily deal with aContextReasoner Context Manager method invocation.
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */

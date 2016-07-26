@@ -18,7 +18,7 @@
 package uk.ac.mdx.cs.ie.acontextlib;
 
 /**
- * Class Description
+ * An class interface to more easily deal with aContextReasoner reasoner Manager method invocation.
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
