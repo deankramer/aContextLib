@@ -38,6 +38,7 @@ public abstract class ContextObserver {
 
     public ContextObserver(Context context) {
         mContext = context;
+        mReceivers = new ContextReceivers();
     }
 
     public ContextObserver(Context context, String name) {
@@ -131,11 +132,6 @@ public abstract class ContextObserver {
     }
 
     public void addContextReceiver(IContextReceiver cr) {
-
-        if (mReceivers == null) {
-            mReceivers = new ContextReceivers();
-        }
-
         mReceivers.add("", cr);
     }
 
