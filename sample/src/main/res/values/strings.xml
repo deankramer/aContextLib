@@ -3,5 +3,6 @@
     <string name="action_start">Start Contexts</string>
     <string name="action_stop">Stop Contexts</string>
     <string name="light_context">Light Context Reading</string>
+    <string name="battery_context">Battery Context Reading</string>
     <string name="indoor_outdoor_context">Indoor/Outdoor Context Reading</string>
 </resources>

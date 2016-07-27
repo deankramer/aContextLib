@@ -26,6 +26,7 @@ import android.widget.TextView;
 import java.util.Map;
 
 import uk.ac.mdx.cs.ie.acontextlib.IContextReceiver;
+import uk.ac.mdx.cs.ie.acontextlib.hardware.BatteryContext;
 import uk.ac.mdx.cs.ie.acontextlib.hardware.LightContext;
 
 /**
@@ -36,19 +37,24 @@ import uk.ac.mdx.cs.ie.acontextlib.hardware.LightContext;
 public class MainActivity extends Activity implements IContextReceiver {
 
     private LightContext mLightContext;
+    private BatteryContext mBatteryContext;
     private Context mContext;
     private TextView mLightLevel;
+    private TextView mBatteryLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mLightLevel = (TextView) findViewById(R.id.txtLight);
+        mBatteryLevel = (TextView) findViewById(R.id.txtBattery);
 
         mContext = getApplicationContext();
         mLightContext = new LightContext(mContext);
+        mBatteryContext = new BatteryContext(mContext);
 
         mLightContext.addContextReceiver(this);
+        mBatteryContext.addContextReceiver(this);
     }
 
     @Override
@@ -79,10 +85,12 @@ public class MainActivity extends Activity implements IContextReceiver {
 
     private void startContexts() {
         mLightContext.start();
+        mBatteryContext.start();
     }
 
     private void stopContexts() {
         mLightContext.stop();
+        mBatteryContext.stop();
     }
 
     @Override
@@ -103,6 +111,8 @@ public class MainActivity extends Activity implements IContextReceiver {
     public void newContextValue(String name, long value) {
         if (name.equals("sensor.light_lumens")) {
             mLightLevel.setText(String.valueOf(value));
+        } else if (name.equals("sensor.battery_level")) {
+            mBatteryLevel.setText(String.valueOf(value));
         }
     }
 
