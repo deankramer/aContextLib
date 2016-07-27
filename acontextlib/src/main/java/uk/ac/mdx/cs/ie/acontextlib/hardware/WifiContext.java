@@ -34,7 +34,7 @@ public class WifiContext extends BroadcastContext {
     private int mWifiState;
 
     public WifiContext(Context c) {
-        super(c, "android.net.wifi.WIFI_STATE_CHANGED", "WifiContext");
+        super(c, WifiManager.NETWORK_STATE_CHANGED_ACTION, "WifiContext");
         mWifiManager = (WifiManager) c.getSystemService(Context.WIFI_SERVICE);
     }
 

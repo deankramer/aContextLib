@@ -17,6 +17,7 @@
 package uk.ac.mdx.cs.ie.acontextlib.hardware;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.BatteryManager;
 import android.os.Bundle;
 
@@ -33,7 +34,7 @@ public class PluggedInContext extends BroadcastContext {
 
 
     public PluggedInContext(Context c) {
-        super(c, "Intent.Action_BATTERY_CHANGED", "PluggedInContext");
+        super(c, Intent.ACTION_BATTERY_CHANGED, "PluggedInContext");
     }
 
     public void checkContext(Bundle data) {

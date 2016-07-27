@@ -17,6 +17,7 @@
 package uk.ac.mdx.cs.ie.acontextlib.hardware;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 
@@ -39,7 +40,7 @@ public class TelephonyContext extends BroadcastContext {
     public TelephonyManager mPhoneManager;
 
     public TelephonyContext(Context c) {
-        super(c, "android.net.conn.CONNECTIVITY_CHANGE", "TelephonyContext");
+        super(c, ConnectivityManager.CONNECTIVITY_ACTION, "TelephonyContext");
         mPhoneManager = (TelephonyManager) c
                 .getSystemService(Context.TELEPHONY_SERVICE);
     }
