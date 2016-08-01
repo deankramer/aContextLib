@@ -37,6 +37,4 @@ public interface IContextReceiver {
 
     void newContextValues(Map<String, String> values);
 
-    void newUIEvent(int event);
-
 }

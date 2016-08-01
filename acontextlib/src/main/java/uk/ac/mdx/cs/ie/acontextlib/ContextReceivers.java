@@ -83,12 +83,4 @@ public class ContextReceivers implements IContextReceiver {
             receiver.newContextValues(values);
         }
     }
-
-    @Override
-    public void newUIEvent(int event) {
-
-        for (IContextReceiver receiver : mReceivers) {
-            receiver.newUIEvent(event);
-        }
-    }
 }
