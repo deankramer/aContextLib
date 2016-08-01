@@ -48,6 +48,12 @@ public class TelephonyContext extends BroadcastContext {
     }
 
     @Override
+    public boolean start() {
+        checkContext(null);
+        return super.start();
+    }
+
+    @Override
     protected void checkContext(Bundle data) {
         Map<String, String> contextValues = new HashMap<String, String>();
         checkRoaming(contextValues);

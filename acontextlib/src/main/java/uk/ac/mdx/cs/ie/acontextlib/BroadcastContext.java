@@ -59,7 +59,14 @@ public abstract class BroadcastContext extends PushObserver {
     }
 
     public void checkContext(Object data) {
-        checkContext((Bundle) data);
+        if (data != null) {
+            if (data instanceof Bundle) {
+                checkContext((Bundle) data);
+            }
+        } else {
+            checkContext(new Bundle());
+        }
+
     }
 
     protected abstract void checkContext(Bundle data);

@@ -40,6 +40,12 @@ public class WifiContext extends BroadcastContext {
     }
 
     @Override
+    public boolean start() {
+        checkContext(null);
+        return super.start();
+    }
+
+    @Override
     protected void checkContext(Bundle data) {
         int newState = mWifiManager.getWifiState();
         if (newState != mWifiState) {
