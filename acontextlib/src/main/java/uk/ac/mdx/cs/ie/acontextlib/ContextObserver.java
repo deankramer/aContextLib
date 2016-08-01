@@ -118,11 +118,6 @@ public abstract class ContextObserver {
         mReceivers.newContextValues(values);
     }
 
-    public void sendToContextReceivers(int event) {
-        mReceivers.newUIEvent(event);
-    }
-
-
     public void setName(String name) {
         this.mName = name;
     }
