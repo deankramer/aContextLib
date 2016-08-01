@@ -31,6 +31,7 @@ import uk.ac.mdx.cs.ie.acontextlib.BroadcastContext;
 public class PluggedInContext extends BroadcastContext {
 
     private boolean mPluggedIn = false;
+    public static final String RECEIVER_PLUGGEDIN = "sensor.plugged_in";
 
 
     public PluggedInContext(Context c) {
@@ -57,7 +58,7 @@ public class PluggedInContext extends BroadcastContext {
         }
 
         //Send the receiver the context update
-        sendToContextReceivers("sensor.plugged_in", mPluggedIn);
+        sendToContextReceivers(RECEIVER_PLUGGEDIN, mPluggedIn);
     }
 
     public boolean isPluggedIn() {

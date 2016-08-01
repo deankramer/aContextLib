@@ -32,9 +32,14 @@ public class UserMoodContext extends PullObserver {
         super(c, 1800000, "UserMoodContext");
     }
 
-    public enum Mood {HAPPY, SAD, UNKNOWN}
+    public static final int UNKNOWN = -1;
+    public static final int HAPPY = 0;
+    public static final int SAD = 1;
+    public static final String RECEIVER_MOOD = "user.mood";
+    public static final String RECEIVER_MOOD_REQUEST = "user.mood_request";
 
-    private Mood mCurrentMood;
+
+    private int mCurrentMood;
 
     @Override
     public boolean start() {
@@ -60,18 +65,18 @@ public class UserMoodContext extends PullObserver {
         return true;
     }
 
-    public void checkContext(Mood mood) {
+    public void checkContext(int mood) {
         if (mCurrentMood != mood) {
             mCurrentMood = mood;
-            sendToContextReceivers("user.mood", getMoodString(mCurrentMood));
+            sendToContextReceivers(RECEIVER_MOOD, getMoodString(mCurrentMood));
         }
     }
 
-    public void updateMood(Mood mood) {
+    public void updateMood(int mood) {
         checkContext(mood);
     }
 
-    public String getMoodString(Mood mood) {
+    public String getMoodString(int mood) {
         switch (mood) {
             case HAPPY:
                 return "happy";
@@ -85,7 +90,7 @@ public class UserMoodContext extends PullObserver {
     }
 
     public void checkContext() {
-        sendToContextReceivers(UIEvent.MOOD_REQUEST);
+        sendToContextReceivers(RECEIVER_MOOD_REQUEST, UIEvent.MOOD_REQUEST);
     }
 
 }

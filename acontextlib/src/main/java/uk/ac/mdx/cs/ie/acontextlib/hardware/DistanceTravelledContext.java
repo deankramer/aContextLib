@@ -35,6 +35,7 @@ public class DistanceTravelledContext extends LocationContext {
     private int mInteval = 30000;
     private Location mLastLocation = null;
     private float mTotalDistance;
+    public static final String RECEIVER_DISTANCE_TRAVELLED = "device.distancetravelled";
 
     public DistanceTravelledContext(Context c) {
         super(c, 3000, 0, "DistanceTravelledContext");
@@ -72,7 +73,7 @@ public class DistanceTravelledContext extends LocationContext {
 
     private synchronized void sendUpdate() {
         long distance = Math.round(mTotalDistance);
-        sendToContextReceivers("device.distancetravelled", distance);
+        sendToContextReceivers(RECEIVER_DISTANCE_TRAVELLED, distance);
         mTotalDistance = 0;
     }
 

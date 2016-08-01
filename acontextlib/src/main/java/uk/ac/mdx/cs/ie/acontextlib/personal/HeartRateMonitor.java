@@ -35,6 +35,8 @@ public class HeartRateMonitor extends BluetoothLEDevice {
 
     public final static String HEART_RATE_MEASUREMENT = "00002a37-0000-1000-8000-00805f9b34fb";
     public final static String HEART_RATE_SERVICE = "0000180d-0000-1000-8000-00805f9b34fb";
+    public final static String RECEIVER_HEARTRATE = "sensor.heartrate";
+    public final static String RECEIVER_HEARTRATE_CONNECTED = "sensor.heartrate.connected";
 
     public HeartRateMonitor(Context c) {
         super(c, UUID.fromString(HEART_RATE_SERVICE), UUID.fromString(HEART_RATE_MEASUREMENT));
@@ -55,11 +57,11 @@ public class HeartRateMonitor extends BluetoothLEDevice {
 
         final int heartRate = characteristic.getIntValue(format, 1);
 
-        sendToContextReceivers("sensor.heartrate", heartRate);
+        sendToContextReceivers(RECEIVER_HEARTRATE, heartRate);
     }
 
     @Override
     public void connectionChange(boolean connected) {
-        sendToContextReceivers("sensor.heartrate.connected", connected);
+        sendToContextReceivers(RECEIVER_HEARTRATE_CONNECTED, connected);
     }
 }

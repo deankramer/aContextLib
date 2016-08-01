@@ -36,6 +36,7 @@ public class GPSIndoorOutdoorContext extends LocationContext {
     private boolean mCurrentValue = false;
     private int signalNeeded;
     private boolean mFirstTime = true;
+    public static final String RECEIVER_INDOOR_OUTDOOR = "sensor.gps_indoor_outdoor";
 
     public GPSIndoorOutdoorContext(Context c) {
         super(c, 3000, 0, "GPSIndoorOutdoorContext");
@@ -43,7 +44,7 @@ public class GPSIndoorOutdoorContext extends LocationContext {
         if (isTablet(c)) {
             signalNeeded = 30;
         } else {
-            signalNeeded = 25;
+            signalNeeded = 26;
         }
     }
 
@@ -76,18 +77,18 @@ public class GPSIndoorOutdoorContext extends LocationContext {
         //Need to make this more accurate
         if ((snr > signalNeeded) && (usedSnrs > 4)) {
             if (!mCurrentValue) {
-                sendToContextReceivers("sensor.gps_indoor_outdoor", true);
+                sendToContextReceivers(RECEIVER_INDOOR_OUTDOOR, false);
                 mCurrentValue = !mCurrentValue;
             }
 
         } else {
             if (mCurrentValue) {
-                sendToContextReceivers("sensor.gps_indoor_outdoor", false);
+                sendToContextReceivers(RECEIVER_INDOOR_OUTDOOR, true);
                 mCurrentValue = !mCurrentValue;
             }
 
             if (mFirstTime) {
-                sendToContextReceivers("sensor.gps_indoor_outdoor", false);
+                sendToContextReceivers(RECEIVER_INDOOR_OUTDOOR, true);
                 mFirstTime = false;
             }
         }

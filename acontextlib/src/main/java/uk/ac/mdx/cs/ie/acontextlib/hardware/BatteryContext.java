@@ -32,6 +32,7 @@ import uk.ac.mdx.cs.ie.acontextlib.BroadcastContext;
 public class BatteryContext extends BroadcastContext {
 
     private int mBatteryLevel;
+    public static final String RECEIVER_BATTERY = "sensor.battery_level";
 
 
     public BatteryContext(Context c) {
@@ -48,7 +49,7 @@ public class BatteryContext extends BroadcastContext {
             mBatteryLevel = (rawlevel * 100) / scale;
 
             //Send the receiver the context update
-            sendToContextReceivers("sensor.battery_level", mBatteryLevel);
+            sendToContextReceivers(RECEIVER_BATTERY, mBatteryLevel);
         }
     }
 

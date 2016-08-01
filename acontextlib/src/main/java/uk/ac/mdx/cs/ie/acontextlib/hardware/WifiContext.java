@@ -32,6 +32,7 @@ public class WifiContext extends BroadcastContext {
 
     private final WifiManager mWifiManager;
     private int mWifiState;
+    public static final String RECEIVER_WIFISTATE = "sensor.wifi_state";
 
     public WifiContext(Context c) {
         super(c, WifiManager.NETWORK_STATE_CHANGED_ACTION, "WifiContext");
@@ -46,7 +47,7 @@ public class WifiContext extends BroadcastContext {
 
             String state = wifiStateToString(newState);
 
-            sendToContextReceivers("sensor.wifi_state", state);
+            sendToContextReceivers(RECEIVER_WIFISTATE, state);
         }
     }
 

@@ -32,6 +32,7 @@ public class LightContext extends SensorContext {
     private long mCurrentValue;
     private long mContextDifferenceHigher = 0;
     private long mContextDifferenceLower = 0;
+    public static final String RECEIVER_LIGHT = "sensor.light_lumens";
 
     public LightContext(Context c) {
         super(c, Sensor.TYPE_LIGHT, SensorManager.SENSOR_DELAY_NORMAL, "LightContext");
@@ -62,7 +63,7 @@ public class LightContext extends SensorContext {
 
         if (difference >= threshold) {
             mCurrentValue = value;
-            sendToContextReceivers("sensor.light_lumens", mCurrentValue);
+            sendToContextReceivers(RECEIVER_LIGHT, mCurrentValue);
             mContextDifferenceHigher = value * 2;
             mContextDifferenceLower = value / 2;
         }

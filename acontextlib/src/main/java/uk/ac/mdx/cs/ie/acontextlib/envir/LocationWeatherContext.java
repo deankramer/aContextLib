@@ -40,6 +40,7 @@ public class LocationWeatherContext extends PullObserver {
     private Location mLocationPlace;
     private boolean mFirstTime = true;
     private boolean mIsStrings = true;
+    public static final String RECEIVER_WEATHER = "weather";
 
     public LocationWeatherContext(Context c) {
         super(c, 2000, "LocationWeatherContext");
@@ -90,7 +91,7 @@ public class LocationWeatherContext extends PullObserver {
                 mCurrentWeather = mWeatherSource.query(mLocationPlace, 0);
             }
 
-            sendToContextReceivers("weather", mCurrentWeather);
+            sendToContextReceivers(RECEIVER_WEATHER, mCurrentWeather);
 
             if (mFirstTime) {
                 mFirstTime = false;

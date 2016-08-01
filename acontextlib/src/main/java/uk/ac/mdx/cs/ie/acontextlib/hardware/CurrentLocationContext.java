@@ -31,6 +31,7 @@ import uk.ac.mdx.cs.ie.acontextlib.LocationContext;
 public class CurrentLocationContext extends LocationContext {
 
     private boolean mIsPassive = false;
+    public static final String RECEIVER_CURRENT_LOCATION = "device.current_loc";
 
     public CurrentLocationContext(Context c, String provider) {
         super(c, provider, "CurrentLocationContext");
@@ -42,7 +43,7 @@ public class CurrentLocationContext extends LocationContext {
 
 
     public void checkContext(Object object) {
-        sendToContextReceivers("device.current_loc", object);
+        sendToContextReceivers(RECEIVER_CURRENT_LOCATION, object);
     }
 
     public void changeProvider(boolean passive) {

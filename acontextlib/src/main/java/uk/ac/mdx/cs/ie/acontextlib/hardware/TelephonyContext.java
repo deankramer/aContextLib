@@ -38,6 +38,8 @@ public class TelephonyContext extends BroadcastContext {
     private boolean mRoaming = false;
     private int mConnectionState = 0;
     public TelephonyManager mPhoneManager;
+    public static final String RECEIVER_TELEPHONY_ROAMING = "sensor.telephony_roaming";
+    public static final String RECEIVER_TELEPHONY_CONSTATE = "sensor.telephone_connectionstate";
 
     public TelephonyContext(Context c) {
         super(c, ConnectivityManager.CONNECTIVITY_ACTION, "TelephonyContext");
@@ -56,7 +58,7 @@ public class TelephonyContext extends BroadcastContext {
     private void checkRoaming(Map<String, String> values) {
         if (mRoaming != mPhoneManager.isNetworkRoaming()) {
             mRoaming = !mRoaming;
-            values.put("sensor.telephony_roaming", String.valueOf(mRoaming));
+            values.put(RECEIVER_TELEPHONY_ROAMING, String.valueOf(mRoaming));
         }
     }
 
@@ -64,7 +66,7 @@ public class TelephonyContext extends BroadcastContext {
         int v = mPhoneManager.getDataState();
         if (v != mConnectionState) {
             mConnectionState = v;
-            values.put("sensor.telephone_connectionstate", getConnectionValue(mConnectionState));
+            values.put(RECEIVER_TELEPHONY_CONSTATE, getConnectionValue(mConnectionState));
         }
     }
 

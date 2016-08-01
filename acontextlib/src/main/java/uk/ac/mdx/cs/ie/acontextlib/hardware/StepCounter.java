@@ -45,6 +45,7 @@ public class StepCounter extends SensorContext {
     private float mLastDiff[] = new float[3 * 2];
     private int mLastMatch = -1;
     private int mCount = 0;
+    public static final String RECEIVER_STEPS = "device.stepcounter";
 
     public StepCounter(Context c) {
         super(c, Sensor.TYPE_ACCELEROMETER, SensorManager.SENSOR_DELAY_FASTEST, "StepCounter");
@@ -109,7 +110,7 @@ public class StepCounter extends SensorContext {
     }
 
     private void sendUpdate() {
-        sendToContextReceivers("device.stepcounter", mCount);
+        sendToContextReceivers(RECEIVER_STEPS, mCount);
         mCount = 0;
     }
 
