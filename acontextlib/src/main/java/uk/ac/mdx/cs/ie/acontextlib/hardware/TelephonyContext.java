@@ -21,9 +21,6 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import uk.ac.mdx.cs.ie.acontextlib.BroadcastContext;
 
 /**
@@ -49,33 +46,29 @@ public class TelephonyContext extends BroadcastContext {
 
     @Override
     public boolean start() {
-        Map<String, String> contextValues = new HashMap<String, String>();
-        contextValues.put(RECEIVER_TELEPHONY_ROAMING, String.valueOf(mPhoneManager.isNetworkRoaming()));
-        checkConnectionState(contextValues);
-        sendToContextReceivers(contextValues);
+        sendToContextReceivers(RECEIVER_TELEPHONY_ROAMING, String.valueOf(mPhoneManager.isNetworkRoaming()));
+        checkConnectionState();
         return super.start();
     }
 
     @Override
     protected void checkContext(Bundle data) {
-        Map<String, String> contextValues = new HashMap<String, String>();
-        checkRoaming(contextValues);
-        checkConnectionState(contextValues);
-        sendToContextReceivers(contextValues);
+        checkRoaming();
+        checkConnectionState();
     }
 
-    private void checkRoaming(Map<String, String> values) {
+    private void checkRoaming() {
         if (mRoaming != mPhoneManager.isNetworkRoaming()) {
             mRoaming = !mRoaming;
-            values.put(RECEIVER_TELEPHONY_ROAMING, String.valueOf(mRoaming));
+            sendToContextReceivers(RECEIVER_TELEPHONY_ROAMING, String.valueOf(mRoaming));
         }
     }
 
-    private void checkConnectionState(Map<String, String> values) {
+    private void checkConnectionState() {
         int v = mPhoneManager.getDataState();
         if (v != mConnectionState) {
             mConnectionState = v;
-            values.put(RECEIVER_TELEPHONY_CONSTATE, getConnectionValue(mConnectionState));
+            sendToContextReceivers(RECEIVER_TELEPHONY_CONSTATE, getConnectionValue(mConnectionState));
         }
     }
 
