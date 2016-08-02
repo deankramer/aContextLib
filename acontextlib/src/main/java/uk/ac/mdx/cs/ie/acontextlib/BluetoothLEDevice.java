@@ -29,6 +29,7 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.CallSuper;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -131,8 +132,14 @@ public abstract class BluetoothLEDevice extends PushObserver {
         }
     }
 
+    @CallSuper
     @Override
-    public boolean start() {
+    public synchronized boolean start() {
+
+        if (mIsRunning) {
+            return false;
+        }
+
         if (!mBluetoothAdapter.isEnabled() || mDeviceID.isEmpty()) {
             return false;
         }
@@ -143,33 +150,39 @@ public abstract class BluetoothLEDevice extends PushObserver {
         return true;
     }
 
+    @CallSuper
     @Override
     public boolean pause() {
 
         return stop();
     }
 
+    @CallSuper
     @Override
     public boolean resume() {
 
         return start();
     }
 
+    @CallSuper
     @Override
-    public boolean stop() {
+    public synchronized boolean stop() {
+        if (mIsRunning) {
+            if (mBluetoothGatt == null) {
+                return false;
+            }
 
-        if (mBluetoothGatt == null) {
+            scanForLeDevice(false);
+
+            mIsRunning = false;
+
+            mBluetoothGatt.close();
+            mBluetoothGatt = null;
+
+            return true;
+        } else {
             return false;
         }
-
-        scanForLeDevice(false);
-
-        mIsRunning = false;
-
-        mBluetoothGatt.close();
-        mBluetoothGatt = null;
-
-        return true;
     }
 
     private BluetoothAdapter.LeScanCallback mLeScanCallback =

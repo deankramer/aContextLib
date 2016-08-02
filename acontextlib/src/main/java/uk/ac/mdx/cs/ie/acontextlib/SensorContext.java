@@ -21,6 +21,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.support.annotation.CallSuper;
 import android.util.Log;
 
 /**
@@ -76,18 +77,24 @@ public abstract class SensorContext extends PushObserver implements SensorEventL
         }
     }
 
+    @CallSuper
     @Override
     public boolean resume() {
         return start();
     }
 
+    @CallSuper
     @Override
     public boolean pause() {
         return stop();
     }
 
+    @CallSuper
     @Override
-    public boolean start() {
+    public synchronized boolean start() {
+        if (mIsRunning) {
+            return false;
+        }
 
         if (mSensorType != -2) {
             if (mSensor != null) {
@@ -111,11 +118,15 @@ public abstract class SensorContext extends PushObserver implements SensorEventL
         mSensor = mSensorManager.getDefaultSensor(mSensorType);
     }
 
+    @CallSuper
     @Override
-    public boolean stop() {
-        mSensorManager.unregisterListener(this, mSensor);
-        mIsRunning = false;
-        return true;
+    public synchronized boolean stop() {
+        if (mIsRunning) {
+            mSensorManager.unregisterListener(this, mSensor);
+            mIsRunning = false;
+            return true;
+        } else {
+            return false;
+        }
     }
-
 }

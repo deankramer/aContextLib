@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
+import android.util.Log;
 
 /**
  * Abstract class to hold everything required by broadcast receiving context components
@@ -71,18 +73,31 @@ public abstract class BroadcastContext extends PushObserver {
 
     protected abstract void checkContext(Bundle data);
 
+    @CallSuper
     @Override
     public boolean resume() {
         return start();
     }
 
+    @CallSuper
     @Override
     public boolean pause() {
         return stop();
     }
 
+    @CallSuper
     @Override
-    public boolean start() {
+    public synchronized boolean start() {
+
+        if (mIsRunning) {
+            return false;
+        }
+
+        if (mIntentFilter.isEmpty()) {
+            Log.e(mName, "No intent filter set to register!");
+            return false;
+        }
+
         Intent currentValue = mContext.registerReceiver(mContextMonitor, new IntentFilter(mIntentFilter));
         if (currentValue != null) {
             checkContext(currentValue.getExtras());
@@ -93,11 +108,16 @@ public abstract class BroadcastContext extends PushObserver {
         return true;
     }
 
+    @CallSuper
     @Override
-    public boolean stop() {
-        mContext.unregisterReceiver(mContextMonitor);
-        mIsRunning = false;
-        return true;
+    public synchronized boolean stop() {
+        if (mIsRunning) {
+            mContext.unregisterReceiver(mContextMonitor);
+            mIsRunning = false;
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
