@@ -81,13 +81,13 @@ public class TelephonyContext extends BroadcastContext {
         String state;
 
         switch (connectionState) {
-            case 1:
+            case TelephonyManager.DATA_CONNECTING:
                 state = "CONNECTING";
                 break;
-            case 2:
+            case TelephonyManager.DATA_CONNECTED:
                 state = "CONNECTED";
                 break;
-            case 3:
+            case TelephonyManager.DATA_SUSPENDED:
                 state = "SUSPENDED";
                 break;
             default:

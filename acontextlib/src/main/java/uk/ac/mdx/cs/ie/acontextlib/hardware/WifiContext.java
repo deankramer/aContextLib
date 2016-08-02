@@ -62,16 +62,16 @@ public class WifiContext extends BroadcastContext {
         String state;
 
         switch (wifiState) {
-            case 1:
+            case WifiManager.WIFI_STATE_DISABLED:
                 state = "WIFI_STATE_DISABLED";
                 break;
-            case 0:
+            case WifiManager.WIFI_STATE_DISABLING:
                 state = "WIFI_STATE_DISABLING";
                 break;
-            case 3:
+            case WifiManager.WIFI_STATE_ENABLED:
                 state = "WIFI_STATE_ENABLED";
                 break;
-            case 2:
+            case WifiManager.WIFI_STATE_ENABLING:
                 state = "WIFI_STATE_ENABLING";
                 break;
             default:
