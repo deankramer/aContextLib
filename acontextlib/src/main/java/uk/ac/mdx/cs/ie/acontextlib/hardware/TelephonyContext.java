@@ -36,7 +36,7 @@ import uk.ac.mdx.cs.ie.acontextlib.BroadcastContext;
 public class TelephonyContext extends BroadcastContext {
 
     private boolean mRoaming = false;
-    private int mConnectionState = 0;
+    private int mConnectionState = -1;
     public TelephonyManager mPhoneManager;
     public static final String RECEIVER_TELEPHONY_ROAMING = "sensor.telephony_roaming";
     public static final String RECEIVER_TELEPHONY_CONSTATE = "sensor.telephone_connectionstate";
@@ -49,7 +49,10 @@ public class TelephonyContext extends BroadcastContext {
 
     @Override
     public boolean start() {
-        checkContext(null);
+        Map<String, String> contextValues = new HashMap<String, String>();
+        contextValues.put(RECEIVER_TELEPHONY_ROAMING, String.valueOf(mPhoneManager.isNetworkRoaming()));
+        checkConnectionState(contextValues);
+        sendToContextReceivers(contextValues);
         return super.start();
     }
 
