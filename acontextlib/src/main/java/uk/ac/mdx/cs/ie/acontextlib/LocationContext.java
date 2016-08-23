@@ -16,6 +16,7 @@
 
 package uk.ac.mdx.cs.ie.acontextlib;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -23,9 +24,14 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
+
+import com.permissioneverywhere.PermissionEverywhere;
+import com.permissioneverywhere.PermissionResponse;
+
 
 /**
- * Abstract class for holding everything needed for location based context components
+ * Abstract class for holding everything needed for location based context observers
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
@@ -67,17 +73,24 @@ public abstract class LocationContext extends PushObserver implements LocationLi
     @Override
     public boolean start() {
 
-        mLocationManager.requestLocationUpdates(mProvider, mMinTime, mMinDistance, this, Looper.getMainLooper());
-        mIsRunning = true;
-        return true;
-    }
+        if (mIsRunning) {
+            return false;
+        }
 
+        if (hasPermission()) {
+            mLocationManager.requestLocationUpdates(mProvider, mMinTime, mMinDistance, this, Looper.getMainLooper());
+            mIsRunning = true;
+            return true;
+        } else {
+            Log.e(mName, "Didn't get permission granted");
+            return false;
+        }
+    }
 
     @Override
     public boolean pause() {
         return stop();
     }
-
 
     @Override
     public boolean resume() {
@@ -86,9 +99,13 @@ public abstract class LocationContext extends PushObserver implements LocationLi
 
     @Override
     public boolean stop() {
-        mLocationManager.removeUpdates(this);
-        mIsRunning = false;
-        return true;
+        if (mIsRunning) {
+            mLocationManager.removeUpdates(this);
+            mIsRunning = false;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -152,4 +169,26 @@ public abstract class LocationContext extends PushObserver implements LocationLi
         }
     }
 
+    @Override
+    protected boolean hasPermission() {
+        PermissionResponse response = null;
+
+        try {
+            response = PermissionEverywhere.getPermission(mContext,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1,
+                    "Location Permission",
+                    "This app needs a location permission",
+                    R.mipmap.ic_launcher)
+                    .call();
+        } catch (InterruptedException e) {
+            Log.e(mName, e.toString());
+        }
+
+        if (response == null) {
+            return false;
+        } else {
+            return response.isGranted();
+        }
+    }
 }

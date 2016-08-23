@@ -140,6 +140,10 @@ public abstract class BluetoothLEDevice extends PushObserver {
             return false;
         }
 
+        if (!hasPermission()) {
+            return false;
+        }
+
         if (!mBluetoothAdapter.isEnabled() || mDeviceID.isEmpty()) {
             return false;
         }

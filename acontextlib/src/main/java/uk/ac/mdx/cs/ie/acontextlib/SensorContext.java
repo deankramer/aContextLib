@@ -96,6 +96,10 @@ public abstract class SensorContext extends PushObserver implements SensorEventL
             return false;
         }
 
+        if (!hasPermission()) {
+            return false;
+        }
+
         if (mSensorType != -2) {
             if (mSensor != null) {
                 mSensorManager.registerListener(this, mSensor, mInterval);

@@ -17,6 +17,7 @@
 package uk.ac.mdx.cs.ie.acontextlib;
 
 import android.content.Context;
+import android.support.annotation.CallSuper;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -54,27 +55,41 @@ public abstract class PullObserver extends ContextObserver {
         }
     }
 
+    @CallSuper
     @Override
     public boolean resume() {
         return start();
     }
 
+    @CallSuper
     @Override
     public boolean pause() {
         return stop();
 
     }
 
+    @CallSuper
     @Override
-    public boolean start() {
-        mTimer = new Timer();
+    public synchronized boolean start() {
+        if (mIsRunning) {
+            return false;
+        }
 
-        mTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                checkContext();
-            }
-        }, mInterval, mInterval);
+        if (!hasPermission()) {
+            return false;
+        }
+
+        //If there is no interval, we consider they do not want a timer.
+        if (mInterval > 0) {
+            mTimer = new Timer();
+
+            mTimer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    checkContext();
+                }
+            }, mInterval, mInterval);
+        }
 
         mIsRunning = true;
 
@@ -84,11 +99,16 @@ public abstract class PullObserver extends ContextObserver {
 
     public abstract void checkContext();
 
+    @CallSuper
     @Override
-    public boolean stop() {
-        mTimer.cancel();
-        mIsRunning = false;
-        return true;
+    public synchronized boolean stop() {
+        if (mIsRunning) {
+            mTimer.cancel();
+            mIsRunning = false;
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

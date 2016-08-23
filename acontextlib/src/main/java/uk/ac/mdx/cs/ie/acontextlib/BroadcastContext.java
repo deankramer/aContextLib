@@ -93,6 +93,10 @@ public abstract class BroadcastContext extends PushObserver {
             return false;
         }
 
+        if (!hasPermission()) {
+            return false;
+        }
+
         if (mIntentFilter.isEmpty()) {
             Log.e(mName, "No intent filter set to register!");
             return false;
@@ -119,5 +123,4 @@ public abstract class BroadcastContext extends PushObserver {
             return false;
         }
     }
-
 }

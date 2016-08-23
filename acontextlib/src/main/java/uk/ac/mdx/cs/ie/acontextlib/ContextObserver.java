@@ -154,4 +154,8 @@ public abstract class ContextObserver {
         return mIsRunning;
     }
 
+    protected boolean hasPermission() {
+        return true;
+    }
+
 }
