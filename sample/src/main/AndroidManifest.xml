@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="uk.ac.mdx.cs.ie.acontextlib.sample">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,12 +14,7 @@
 
         <meta-data
             android:name="openWeatherMap_ApiKey"
-            android:value=
-            NEED
-            TO
-            FILL
-            THIS
-            IN />
+            android:value="4ad9bd2a71d6a9f05901e2b1379f5045" />
 
         <activity
             android:name=".MainActivity"

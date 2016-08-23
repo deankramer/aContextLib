@@ -27,6 +27,7 @@ import java.util.Map;
 
 import uk.ac.mdx.cs.ie.acontextlib.IContextReceiver;
 import uk.ac.mdx.cs.ie.acontextlib.hardware.BatteryContext;
+import uk.ac.mdx.cs.ie.acontextlib.hardware.GPSIndoorOutdoorContext;
 import uk.ac.mdx.cs.ie.acontextlib.hardware.LightContext;
 
 /**
@@ -38,9 +39,11 @@ public class MainActivity extends Activity implements IContextReceiver {
 
     private LightContext mLightContext;
     private BatteryContext mBatteryContext;
+    private GPSIndoorOutdoorContext mIndoorContext;
     private Context mContext;
     private TextView mLightLevel;
     private TextView mBatteryLevel;
+    private TextView mIndoorStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +51,17 @@ public class MainActivity extends Activity implements IContextReceiver {
         setContentView(R.layout.activity_main);
         mLightLevel = (TextView) findViewById(R.id.txtLight);
         mBatteryLevel = (TextView) findViewById(R.id.txtBattery);
+        mIndoorStatus = (TextView) findViewById(R.id.txtIndoor);
 
         mContext = getApplicationContext();
         mLightContext = new LightContext(mContext);
         mBatteryContext = new BatteryContext(mContext);
+        mIndoorContext = new GPSIndoorOutdoorContext(mContext);
+
 
         mLightContext.addContextReceiver(this);
         mBatteryContext.addContextReceiver(this);
+        mIndoorContext.addContextReceiver(this);
     }
 
     @Override
@@ -86,11 +93,13 @@ public class MainActivity extends Activity implements IContextReceiver {
     private void startContexts() {
         mLightContext.start();
         mBatteryContext.start();
+        mIndoorContext.start();
     }
 
     private void stopContexts() {
         mLightContext.stop();
         mBatteryContext.stop();
+        mIndoorContext.stop();
     }
 
     @Override
@@ -109,9 +118,9 @@ public class MainActivity extends Activity implements IContextReceiver {
 
     @Override
     public void newContextValue(String name, long value) {
-        if (name.equals("sensor.light_lumens")) {
+        if (name.equals(LightContext.RECEIVER_LIGHT)) {
             mLightLevel.setText(String.valueOf(value));
-        } else if (name.equals("sensor.battery_level")) {
+        } else if (name.equals(BatteryContext.RECEIVER_BATTERY)) {
             mBatteryLevel.setText(String.valueOf(value));
         }
     }
@@ -122,8 +131,15 @@ public class MainActivity extends Activity implements IContextReceiver {
     }
 
     @Override
-    public void newContextValue(String name, boolean value) {
-
+    public void newContextValue(final String name, final boolean value) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (name.equals(GPSIndoorOutdoorContext.RECEIVER_INDOOR_OUTDOOR)) {
+                    mIndoorStatus.setText(String.valueOf(value));
+                }
+            }
+        });
     }
 
     @Override
@@ -141,8 +157,4 @@ public class MainActivity extends Activity implements IContextReceiver {
 
     }
 
-    @Override
-    public void newUIEvent(int event) {
-
-    }
 }
