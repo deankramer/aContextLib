@@ -21,12 +21,14 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.support.annotation.CallSuper;
 import android.util.Log;
 
 /**
  * Abstract class to hold everything required by sensor based context components
  * Interval time is by default SensorManager.SENSOR_DELAY_NORMAL
+ * Max Internal time (used for batching if required) is by default 0
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
@@ -36,6 +38,7 @@ public abstract class SensorContext extends PushObserver implements SensorEventL
     private int mSensorType = -2;
     private Sensor mSensor;
     private int mInterval = SensorManager.SENSOR_DELAY_NORMAL;
+    private int mMaxInterval = 0;
 
     public SensorContext(Context c) {
         super(c);
@@ -102,7 +105,11 @@ public abstract class SensorContext extends PushObserver implements SensorEventL
 
         if (mSensorType != -2) {
             if (mSensor != null) {
-                mSensorManager.registerListener(this, mSensor, mInterval);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    mSensorManager.registerListener(this, mSensor, mInterval, mMaxInterval);
+                } else {
+                    mSensorManager.registerListener(this, mSensor, mInterval);
+                }
                 mIsRunning = true;
                 return true;
             } else {
@@ -120,6 +127,15 @@ public abstract class SensorContext extends PushObserver implements SensorEventL
     public void setSensorType(int sensorType) {
         mSensorType = sensorType;
         mSensor = mSensorManager.getDefaultSensor(mSensorType);
+    }
+
+    public int getSensorType() {
+        return mSensorType;
+    }
+
+    public void setBatchingDelay(int maxDelay) {
+        mMaxInterval = maxDelay;
+
     }
 
     @CallSuper
