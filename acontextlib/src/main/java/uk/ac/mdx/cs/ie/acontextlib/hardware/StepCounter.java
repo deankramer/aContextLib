@@ -17,6 +17,7 @@
 package uk.ac.mdx.cs.ie.acontextlib.hardware;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 
@@ -44,12 +45,33 @@ public class StepCounter extends SensorContext {
     private float mLastExtremes[][] = {new float[3 * 2], new float[3 * 2]};
     private float mLastDiff[] = new float[3 * 2];
     private int mLastMatch = -1;
+    private int mSensorCount = 0;
     private int mCount = 0;
     public static final String RECEIVER_STEPS = "device.stepcounter";
 
     public StepCounter(Context c) {
-        super(c, Sensor.TYPE_ACCELEROMETER, SensorManager.SENSOR_DELAY_FASTEST, "StepCounter");
+
+        super(c);
+        setName("StepCounter");
+        setInterval(SensorManager.SENSOR_DELAY_NORMAL);
+
+        if (hasHardwareSensor(c)) {
+            setBatchingDelay(4000000);
+            setSensorType(Sensor.TYPE_STEP_COUNTER);
+        } else {
+            setSensorType(Sensor.TYPE_ACCELEROMETER);
+        }
+
         setupContext();
+    }
+
+    private static boolean hasHardwareSensor(Context c) {
+        int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+        // Check that the device supports the step counter and detector sensors
+        PackageManager packageManager = c.getPackageManager();
+        return currentApiVersion >= android.os.Build.VERSION_CODES.KITKAT
+                && packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER)
+                && packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_DETECTOR);
     }
 
     private void setupContext() {
@@ -59,39 +81,49 @@ public class StepCounter extends SensorContext {
     }
 
     @Override
-    protected void checkContext(float[] values) {
-        float vSum = 0;
-        for (int i = 0; i < 3; i++) {
-            final float v = mYOffset + values[i] * mScale;
-            vSum += v;
-        }
-        int k = 0;
-        float v = vSum / 3;
+    protected synchronized void checkContext(float[] values) {
 
-        float direction = (v > mLastValues[k] ? 1 : (v < mLastValues[k] ? -1 : 0));
-        if (direction == -mLastDirections[k]) {
-            int extType = (direction > 0 ? 0 : 1);
-
-            mLastExtremes[extType][k] = mLastValues[k];
-            float diff = Math.abs(mLastExtremes[extType][k] - mLastExtremes[1 - extType][k]);
-
-            if (diff > mLimit) {
-
-                boolean isAlmostAsLargeAsPrevious = diff > (mLastDiff[k] * 2 / 3);
-                boolean isPreviousLargeEnough = mLastDiff[k] > (diff / 3);
-                boolean isNotContra = (mLastMatch != 1 - extType);
-
-                if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
-                    mCount++;
-                    mLastMatch = extType;
-                } else {
-                    mLastMatch = -1;
-                }
+        if (getSensorType() == Sensor.TYPE_STEP_COUNTER) {
+            if (mSensorCount < 1) {
+                mSensorCount = (int) values[0];
             }
-            mLastDiff[k] = diff;
+
+            mCount = (int) values[0] - mSensorCount;
+
+        } else {
+            float vSum = 0;
+            for (int i = 0; i < 3; i++) {
+                final float v = mYOffset + values[i] * mScale;
+                vSum += v;
+            }
+            int k = 0;
+            float v = vSum / 3;
+
+            float direction = (v > mLastValues[k] ? 1 : (v < mLastValues[k] ? -1 : 0));
+            if (direction == -mLastDirections[k]) {
+                int extType = (direction > 0 ? 0 : 1);
+
+                mLastExtremes[extType][k] = mLastValues[k];
+                float diff = Math.abs(mLastExtremes[extType][k] - mLastExtremes[1 - extType][k]);
+
+                if (diff > mLimit) {
+
+                    boolean isAlmostAsLargeAsPrevious = diff > (mLastDiff[k] * 2 / 3);
+                    boolean isPreviousLargeEnough = mLastDiff[k] > (diff / 3);
+                    boolean isNotContra = (mLastMatch != 1 - extType);
+
+                    if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
+                        mCount++;
+                        mLastMatch = extType;
+                    } else {
+                        mLastMatch = -1;
+                    }
+                }
+                mLastDiff[k] = diff;
+            }
+            mLastDirections[k] = direction;
+            mLastValues[k] = v;
         }
-        mLastDirections[k] = direction;
-        mLastValues[k] = v;
     }
 
     @Override
@@ -106,12 +138,18 @@ public class StepCounter extends SensorContext {
             }
         }, mInterval, mInterval);
 
-        return super.start();
+        if (super.start()) {
+            return true;
+        } else {
+            setSensorType(Sensor.TYPE_ACCELEROMETER);
+            return super.start();
+        }
     }
 
-    private void sendUpdate() {
+    private synchronized void sendUpdate() {
         sendToContextReceivers(RECEIVER_STEPS, mCount);
         mCount = 0;
+        mSensorCount = 0;
     }
 
     @Override
