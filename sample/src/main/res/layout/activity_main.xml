@@ -45,4 +45,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtIndoor" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/step_context"
+        android:id="@+id/lblSteps" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtSteps" />
 </LinearLayout>

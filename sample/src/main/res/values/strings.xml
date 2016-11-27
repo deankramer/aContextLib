@@ -5,4 +5,5 @@
     <string name="light_context">Light Context Reading</string>
     <string name="battery_context">Battery Context Reading</string>
     <string name="indoor_outdoor_context">Indoor/Outdoor Context Reading</string>
+    <string name="step_context">StepCounter Reading</string>
 </resources>
