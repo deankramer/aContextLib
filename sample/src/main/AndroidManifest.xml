@@ -14,7 +14,7 @@
 
         <meta-data
             android:name="openWeatherMap_ApiKey"
-            android:value="4ad9bd2a71d6a9f05901e2b1379f5045" />
+            android:value="" />
 
         <activity
             android:name=".MainActivity"
