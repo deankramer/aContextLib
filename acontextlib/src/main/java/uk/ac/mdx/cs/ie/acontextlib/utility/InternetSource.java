@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.ac.mdx.cs.ie.acontextlib.envir.weather.source;
+package uk.ac.mdx.cs.ie.acontextlib.utility;
 
 import android.util.Log;
 
@@ -26,24 +26,46 @@ import java.net.URL;
 
 import uk.ac.mdx.cs.ie.acontextlib.ContextException;
 
+/**
+ * Abstract class for dealing with internet based data sources
+ *
+ * @author Dean Kramer <d.kramer@mdx.ac.uk>
+ */
 
-public class HttpWeatherSource {
+public abstract class InternetSource {
 
     public static final String ENCODING = "UTF-8";
 
-    static final String CHARSET = "charset=";
+    private static final String CHARSET = "charset=";
 
     private static final int HTTP_STATUS_OK = 200;
 
-    static final String USER_AGENT = "aContextLib (Weather)";
+    static final String USER_AGENT = "aContextLib";
 
     private HttpURLConnection client;
 
-    private static final String mTag = "HttpWeatherSource";
+    protected static final String LOG_TAG = "InternetSource";
+
+
+    protected String readToString(String url) throws ContextException {
+        StringBuilder result = new StringBuilder();
+        InputStreamReader reader = getReaderForURL(url);
+        char[] buf = new char[8192];
+        try {
+            int read = reader.read(buf);
+            while (read >= 0) {
+                result.append(buf, 0, read);
+                read = reader.read(buf);
+            }
+        } catch (IOException e) {
+            throw new ContextException("Error reading stream", e);
+        }
+        return result.toString();
+    }
 
 
     protected InputStreamReader getReaderForURL(String urlString) throws ContextException {
-        Log.d(mTag, "requesting " + urlString);
+        Log.d(LOG_TAG, "requesting " + urlString);
         try {
             URL url = new URL(urlString);
             client = (HttpURLConnection) url.openConnection();
@@ -66,7 +88,7 @@ public class HttpWeatherSource {
                         String.valueOf(status));
             }
 
-            charset = HttpUtils.getCharset(client);
+            charset = getCharset(client);
 
             InputStreamReader inputStream = new InputStreamReader(client.getInputStream(), charset);
 
@@ -78,8 +100,26 @@ public class HttpWeatherSource {
         }
     }
 
-
-    protected void prepareRequest(HttpURLConnection request) {
+    public static String getCharset(HttpURLConnection conn) {
+        return getCharset(conn.getContentType().toString());
     }
+
+    public static String getCharset(String contentType) {
+        if (contentType == null) {
+            return ENCODING;
+        }
+        int charsetPos = contentType.indexOf(CHARSET);
+        if (charsetPos < 0) {
+            return ENCODING;
+        }
+        charsetPos += CHARSET.length();
+        int endPos = contentType.indexOf(';', charsetPos);
+        if (endPos < 0) {
+            endPos = contentType.length();
+        }
+        return contentType.substring(charsetPos, endPos);
+    }
+
+    protected abstract void prepareRequest(HttpURLConnection request);
 
 }
