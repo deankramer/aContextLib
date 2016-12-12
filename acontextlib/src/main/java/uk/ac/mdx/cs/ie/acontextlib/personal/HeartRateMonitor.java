@@ -16,10 +16,10 @@
 
 package uk.ac.mdx.cs.ie.acontextlib.personal;
 
-import android.annotation.TargetApi;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 
 import java.util.UUID;
 
@@ -30,7 +30,7 @@ import uk.ac.mdx.cs.ie.acontextlib.BluetoothLEDevice;
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class HeartRateMonitor extends BluetoothLEDevice {
 
     public final static String HEART_RATE_MEASUREMENT = "00002a37-0000-1000-8000-00805f9b34fb";

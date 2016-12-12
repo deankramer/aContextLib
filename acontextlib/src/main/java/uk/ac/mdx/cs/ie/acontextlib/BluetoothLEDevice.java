@@ -16,7 +16,6 @@
 
 package uk.ac.mdx.cs.ie.acontextlib;
 
-import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -30,6 +29,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.CallSuper;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ import java.util.UUID;
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public abstract class BluetoothLEDevice extends PushObserver {
 
     private static final long SCAN_PERIOD = 10000;
