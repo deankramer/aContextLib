@@ -29,19 +29,19 @@ import android.util.Log;
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
-public abstract class BroadcastContext extends PushObserver {
+public abstract class BroadcastObserver extends PushObserver {
 
 
     private BroadcastReceiver mContextMonitor = null;
     protected String mIntentFilter = "";
 
 
-    public BroadcastContext(Context c) {
+    public BroadcastObserver(Context c) {
         super(c);
         setupMonitor();
     }
 
-    public BroadcastContext(Context c, String filter, String name) {
+    public BroadcastObserver(Context c, String filter, String name) {
         super(c, name);
         mIntentFilter = filter;
         setupMonitor();

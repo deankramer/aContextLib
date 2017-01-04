@@ -20,26 +20,26 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 
-import uk.ac.mdx.cs.ie.acontextlib.SensorContext;
+import uk.ac.mdx.cs.ie.acontextlib.SensorObserver;
 
 /**
  * Gets the level of light lumens
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
-public class LightContext extends SensorContext {
+public class LightObserver extends SensorObserver {
 
     private long mCurrentValue;
     private long mContextDifferenceHigher = 0;
     private long mContextDifferenceLower = 0;
     public static final String RECEIVER_LIGHT = "sensor.light_lumens";
 
-    public LightContext(Context c) {
-        super(c, Sensor.TYPE_LIGHT, SensorManager.SENSOR_DELAY_NORMAL, "LightContext");
+    public LightObserver(Context c) {
+        super(c, Sensor.TYPE_LIGHT, SensorManager.SENSOR_DELAY_NORMAL, "LightObserver");
 
     }
 
-    public LightContext(Context c, long difference) {
+    public LightObserver(Context c, long difference) {
         this(c);
         mContextDifferenceHigher = difference;
     }

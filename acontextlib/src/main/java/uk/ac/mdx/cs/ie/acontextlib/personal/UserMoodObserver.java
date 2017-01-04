@@ -26,10 +26,10 @@ import uk.ac.mdx.cs.ie.acontextlib.UIEvent;
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
-public class UserMoodContext extends PullObserver {
+public class UserMoodObserver extends PullObserver {
 
-    public UserMoodContext(Context c) {
-        super(c, 1800000, "UserMoodContext");
+    public UserMoodObserver(Context c) {
+        super(c, 1800000, "UserMoodObserver");
     }
 
     public static final int UNKNOWN = -1;

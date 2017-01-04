@@ -21,7 +21,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 
-import uk.ac.mdx.cs.ie.acontextlib.BroadcastContext;
+import uk.ac.mdx.cs.ie.acontextlib.BroadcastObserver;
 
 /**
  * Handles telephone related contexts including:
@@ -30,7 +30,7 @@ import uk.ac.mdx.cs.ie.acontextlib.BroadcastContext;
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
-public class TelephonyContext extends BroadcastContext {
+public class TelephonyObserver extends BroadcastObserver {
 
     private boolean mRoaming = false;
     private int mConnectionState = -1;
@@ -38,8 +38,8 @@ public class TelephonyContext extends BroadcastContext {
     public static final String RECEIVER_TELEPHONY_ROAMING = "sensor.telephony_roaming";
     public static final String RECEIVER_TELEPHONY_CONSTATE = "sensor.telephone_connectionstate";
 
-    public TelephonyContext(Context c) {
-        super(c, ConnectivityManager.CONNECTIVITY_ACTION, "TelephonyContext");
+    public TelephonyObserver(Context c) {
+        super(c, ConnectivityManager.CONNECTIVITY_ACTION, "TelephonyObserver");
         mPhoneManager = (TelephonyManager) c
                 .getSystemService(Context.TELEPHONY_SERVICE);
     }

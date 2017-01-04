@@ -32,7 +32,7 @@ import uk.ac.mdx.cs.ie.acontextlib.envir.weather.source.Weather;
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
-public class LocationWeatherContext extends PullObserver {
+public class LocationWeatherObserver extends PullObserver {
 
     private OpenWeatherMapSource mWeatherSource;
     private Weather mCurrentWeather;
@@ -42,17 +42,17 @@ public class LocationWeatherContext extends PullObserver {
     private boolean mIsStrings = true;
     public static final String RECEIVER_WEATHER = "weather";
 
-    public LocationWeatherContext(Context c) {
-        super(c, 2000, "LocationWeatherContext");
+    public LocationWeatherObserver(Context c) {
+        super(c, 2000, "LocationWeatherObserver");
         mWeatherSource = new OpenWeatherMapSource(c);
     }
 
-    public LocationWeatherContext(Context c, String place) {
+    public LocationWeatherObserver(Context c, String place) {
         this(c);
         mPlace = place;
     }
 
-    public LocationWeatherContext(Context c, Location place) {
+    public LocationWeatherObserver(Context c, Location place) {
         this(c);
         mLocationPlace = place;
         mIsStrings = false;

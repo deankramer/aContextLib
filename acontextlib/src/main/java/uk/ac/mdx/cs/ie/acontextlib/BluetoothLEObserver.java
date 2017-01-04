@@ -42,7 +42,7 @@ import java.util.UUID;
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
 @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-public abstract class BluetoothLEDevice extends PushObserver {
+public abstract class BluetoothLEObserver extends PushObserver {
 
     private static final long SCAN_PERIOD = 10000;
     private BluetoothAdapter mBluetoothAdapter;
@@ -53,10 +53,10 @@ public abstract class BluetoothLEDevice extends PushObserver {
     private ArrayList<UUID> mInterestedMeasurements;
     private String mDeviceID;
     private UUID mPhoneID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
-    private static final String LOG_TAG = "BluetoothLEDevice";
+    private static final String LOG_TAG = "BluetoothLEObserver";
     private boolean mConnectRetry = false;
 
-    public BluetoothLEDevice(Context c) {
+    public BluetoothLEObserver(Context c) {
 
         super(c);
 
@@ -65,8 +65,8 @@ public abstract class BluetoothLEDevice extends PushObserver {
         mBluetoothAdapter = bluetoothManager.getAdapter();
     }
 
-    public BluetoothLEDevice(Context c, UUID service,
-                             UUID measurement) {
+    public BluetoothLEObserver(Context c, UUID service,
+                               UUID measurement) {
 
         this(c);
 
@@ -78,8 +78,8 @@ public abstract class BluetoothLEDevice extends PushObserver {
 
     }
 
-    public BluetoothLEDevice(Context c, ArrayList<UUID> services,
-                             ArrayList<UUID> measurements) {
+    public BluetoothLEObserver(Context c, ArrayList<UUID> services,
+                               ArrayList<UUID> measurements) {
 
         this(c);
 

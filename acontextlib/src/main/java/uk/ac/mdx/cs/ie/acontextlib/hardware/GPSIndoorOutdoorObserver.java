@@ -22,14 +22,14 @@ import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.os.Looper;
 
-import uk.ac.mdx.cs.ie.acontextlib.LocationContext;
+import uk.ac.mdx.cs.ie.acontextlib.LocationObserver;
 
 /**
  * Calculates if the device is outside comparing the SNR for all visible GPS Satellites.
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
-public class GPSIndoorOutdoorContext extends LocationContext {
+public class GPSIndoorOutdoorObserver extends LocationObserver {
 
     private final GpsListener gpsListener = new GpsListener();
     private GpsStatus gpsStatus;
@@ -38,8 +38,8 @@ public class GPSIndoorOutdoorContext extends LocationContext {
     private boolean mFirstTime = true;
     public static final String RECEIVER_INDOOR_OUTDOOR = "sensor.gps_indoor_outdoor";
 
-    public GPSIndoorOutdoorContext(Context c) {
-        super(c, 3000, 0, "GPSIndoorOutdoorContext");
+    public GPSIndoorOutdoorObserver(Context c) {
+        super(c, 3000, 0, "GPSIndoorOutdoorObserver");
         gpsStatus = mLocationManager.getGpsStatus(null);
         if (isTablet(c)) {
             signalNeeded = 30;
@@ -103,7 +103,7 @@ public class GPSIndoorOutdoorContext extends LocationContext {
             @Override
             public void run() {
                 Looper.prepare();
-                GPSIndoorOutdoorContext.super.start();
+                GPSIndoorOutdoorObserver.super.start();
                 mLocationManager.addGpsStatusListener(gpsListener);
                 Looper.loop();
             }

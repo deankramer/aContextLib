@@ -24,14 +24,14 @@ import android.hardware.SensorManager;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import uk.ac.mdx.cs.ie.acontextlib.SensorContext;
+import uk.ac.mdx.cs.ie.acontextlib.SensorObserver;
 
 /**
  * Count the number of steps in a given time
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
-public class StepCounter extends SensorContext {
+public class StepCounterObserver extends SensorObserver {
 
     private Timer mTimer;
     private int mInterval = 20000;
@@ -49,10 +49,10 @@ public class StepCounter extends SensorContext {
     private int mCount = 0;
     public static final String RECEIVER_STEPS = "device.stepcounter";
 
-    public StepCounter(Context c) {
+    public StepCounterObserver(Context c) {
 
         super(c);
-        setName("StepCounter");
+        setName("StepCounterObserver");
         setInterval(SensorManager.SENSOR_DELAY_NORMAL);
 
         if (hasHardwareSensor(c)) {

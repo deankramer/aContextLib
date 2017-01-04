@@ -22,14 +22,14 @@ import android.location.Location;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import uk.ac.mdx.cs.ie.acontextlib.LocationContext;
+import uk.ac.mdx.cs.ie.acontextlib.LocationObserver;
 
 /**
  * Calculates distanced travelled continously
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
-public class DistanceTravelledContext extends LocationContext {
+public class DistanceTravelledObserver extends LocationObserver {
 
     private Timer mTimer;
     private int mInteval = 30000;
@@ -37,8 +37,8 @@ public class DistanceTravelledContext extends LocationContext {
     private float mTotalDistance;
     public static final String RECEIVER_DISTANCE_TRAVELLED = "device.distancetravelled";
 
-    public DistanceTravelledContext(Context c) {
-        super(c, 3000, 0, "DistanceTravelledContext");
+    public DistanceTravelledObserver(Context c) {
+        super(c, 3000, 0, "DistanceTravelledObserver");
     }
 
     public void checkContext(Object data) {

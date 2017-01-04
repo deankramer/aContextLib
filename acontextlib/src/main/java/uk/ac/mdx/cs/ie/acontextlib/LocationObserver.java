@@ -35,7 +35,7 @@ import com.permissioneverywhere.PermissionResponse;
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
-public abstract class LocationContext extends PushObserver implements LocationListener {
+public abstract class LocationObserver extends PushObserver implements LocationListener {
 
     protected LocationManager mLocationManager;
     private int mMinTime = 3000;
@@ -44,12 +44,12 @@ public abstract class LocationContext extends PushObserver implements LocationLi
     private String mIdealProvider = LocationManager.GPS_PROVIDER;
 
 
-    public LocationContext(Context c) {
+    public LocationObserver(Context c) {
         super(c);
         mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
     }
 
-    public LocationContext(Context c, int minTime, int minDistance, String name) {
+    public LocationObserver(Context c, int minTime, int minDistance, String name) {
         super(c, name);
         mName = name;
         mMinTime = minTime;
@@ -57,14 +57,14 @@ public abstract class LocationContext extends PushObserver implements LocationLi
         mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
     }
 
-    public LocationContext(Context c, String provider, String name) {
+    public LocationObserver(Context c, String provider, String name) {
         super(c, name);
         mProvider = provider;
         mIdealProvider = provider;
         mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
     }
 
-    public LocationContext(Context c, int minTime, int minDistance, String provider, String name) {
+    public LocationObserver(Context c, int minTime, int minDistance, String provider, String name) {
         this(c, minTime, minDistance, name);
         mProvider = provider;
         mIdealProvider = provider;

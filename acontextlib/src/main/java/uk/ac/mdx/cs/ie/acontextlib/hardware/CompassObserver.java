@@ -20,21 +20,21 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 
-import uk.ac.mdx.cs.ie.acontextlib.SensorContext;
+import uk.ac.mdx.cs.ie.acontextlib.SensorObserver;
 
 /**
  * Gathers the curent orientation of the user.
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
-public class CompassContext extends SensorContext {
+public class CompassObserver extends SensorObserver {
 
 
     private long mCurrentDegrees;
     public static final String RECEIVER_COMPASS = "sensor.compass_degrees";
 
-    public CompassContext(Context c) {
-        //super(c, cr, Sensor.TYPE_MAGNETIC_FIELD, SensorManager.SENSOR_DELAY_NORMAL, "CompassContext");
-        super(c, Sensor.TYPE_ORIENTATION, SensorManager.SENSOR_DELAY_NORMAL, "CompassContext");
+    public CompassObserver(Context c) {
+        //super(c, cr, Sensor.TYPE_MAGNETIC_FIELD, SensorManager.SENSOR_DELAY_NORMAL, "CompassObserver");
+        super(c, Sensor.TYPE_ORIENTATION, SensorManager.SENSOR_DELAY_NORMAL, "CompassObserver");
     }
 
 

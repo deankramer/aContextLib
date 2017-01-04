@@ -23,7 +23,7 @@ import android.support.annotation.RequiresApi;
 
 import java.util.UUID;
 
-import uk.ac.mdx.cs.ie.acontextlib.BluetoothLEDevice;
+import uk.ac.mdx.cs.ie.acontextlib.BluetoothLEObserver;
 
 /**
  * Gets heart rates from a bluetooth monitor.
@@ -31,14 +31,14 @@ import uk.ac.mdx.cs.ie.acontextlib.BluetoothLEDevice;
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
 @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-public class HeartRateMonitor extends BluetoothLEDevice {
+public class HeartRateObserver extends BluetoothLEObserver {
 
     public final static String HEART_RATE_MEASUREMENT = "00002a37-0000-1000-8000-00805f9b34fb";
     public final static String HEART_RATE_SERVICE = "0000180d-0000-1000-8000-00805f9b34fb";
     public final static String RECEIVER_HEARTRATE = "sensor.heartrate";
     public final static String RECEIVER_HEARTRATE_CONNECTED = "sensor.heartrate.connected";
 
-    public HeartRateMonitor(Context c) {
+    public HeartRateObserver(Context c) {
         super(c, UUID.fromString(HEART_RATE_SERVICE), UUID.fromString(HEART_RATE_MEASUREMENT));
     }
 

@@ -21,21 +21,21 @@ import android.content.Intent;
 import android.os.BatteryManager;
 import android.os.Bundle;
 
-import uk.ac.mdx.cs.ie.acontextlib.BroadcastContext;
+import uk.ac.mdx.cs.ie.acontextlib.BroadcastObserver;
 
 /**
  * Monitors whether the device is plugged in
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
-public class PluggedInContext extends BroadcastContext {
+public class PluggedInObserver extends BroadcastObserver {
 
     private boolean mPluggedIn = false;
     public static final String RECEIVER_PLUGGEDIN = "sensor.plugged_in";
 
 
-    public PluggedInContext(Context c) {
-        super(c, Intent.ACTION_BATTERY_CHANGED, "PluggedInContext");
+    public PluggedInObserver(Context c) {
+        super(c, Intent.ACTION_BATTERY_CHANGED, "PluggedInObserver");
     }
 
     public void checkContext(Bundle data) {

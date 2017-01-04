@@ -21,20 +21,20 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Looper;
 
-import uk.ac.mdx.cs.ie.acontextlib.LocationContext;
+import uk.ac.mdx.cs.ie.acontextlib.LocationObserver;
 
 /**
  * Gets the current device location
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
-public class CurrentLocationContext extends LocationContext {
+public class CurrentLocationObserver extends LocationObserver {
 
     private boolean mIsPassive = false;
     public static final String RECEIVER_CURRENT_LOCATION = "device.current_loc";
 
-    public CurrentLocationContext(Context c, String provider) {
-        super(c, provider, "CurrentLocationContext");
+    public CurrentLocationObserver(Context c, String provider) {
+        super(c, provider, "CurrentLocationObserver");
 
         if (provider.equals(LocationManager.PASSIVE_PROVIDER)) {
             mIsPassive = true;
@@ -71,7 +71,7 @@ public class CurrentLocationContext extends LocationContext {
                         Looper.prepare();
 
                         mLocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER,
-                                CurrentLocationContext.this, null);
+                                CurrentLocationObserver.this, null);
                         Looper.loop();
                     }
                 });

@@ -32,7 +32,7 @@ import android.util.Log;
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
-public abstract class SensorContext extends PushObserver implements SensorEventListener {
+public abstract class SensorObserver extends PushObserver implements SensorEventListener {
 
     private SensorManager mSensorManager;
     private int mSensorType = -2;
@@ -40,13 +40,13 @@ public abstract class SensorContext extends PushObserver implements SensorEventL
     private int mInterval = SensorManager.SENSOR_DELAY_NORMAL;
     private int mMaxInterval = 0;
 
-    public SensorContext(Context c) {
+    public SensorObserver(Context c) {
         super(c);
         mSensorManager = (SensorManager) c
                 .getSystemService(Context.SENSOR_SERVICE);
     }
 
-    public SensorContext(Context c, int sensorType, int interval, String name) {
+    public SensorObserver(Context c, int sensorType, int interval, String name) {
         super(c, name);
         mSensorType = sensorType;
         mInterval = interval;

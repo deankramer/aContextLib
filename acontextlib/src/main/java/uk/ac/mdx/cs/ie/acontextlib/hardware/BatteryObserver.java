@@ -21,7 +21,7 @@ import android.content.Intent;
 import android.os.BatteryManager;
 import android.os.Bundle;
 
-import uk.ac.mdx.cs.ie.acontextlib.BroadcastContext;
+import uk.ac.mdx.cs.ie.acontextlib.BroadcastObserver;
 
 
 /**
@@ -29,14 +29,14 @@ import uk.ac.mdx.cs.ie.acontextlib.BroadcastContext;
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
-public class BatteryContext extends BroadcastContext {
+public class BatteryObserver extends BroadcastObserver {
 
     private int mBatteryLevel;
     public static final String RECEIVER_BATTERY = "sensor.battery_level";
 
 
-    public BatteryContext(Context c) {
-        super(c, Intent.ACTION_BATTERY_CHANGED, "BatteryContext");
+    public BatteryObserver(Context c) {
+        super(c, Intent.ACTION_BATTERY_CHANGED, "BatteryObserver");
     }
 
 

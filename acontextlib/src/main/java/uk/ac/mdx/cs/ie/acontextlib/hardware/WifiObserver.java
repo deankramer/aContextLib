@@ -20,22 +20,22 @@ import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
-import uk.ac.mdx.cs.ie.acontextlib.BroadcastContext;
+import uk.ac.mdx.cs.ie.acontextlib.BroadcastObserver;
 
 /**
  * Provides Wifi State messages (contecting
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
-public class WifiContext extends BroadcastContext {
+public class WifiObserver extends BroadcastObserver {
 
 
     private final WifiManager mWifiManager;
     private int mWifiState;
     public static final String RECEIVER_WIFISTATE = "sensor.wifi_state";
 
-    public WifiContext(Context c) {
-        super(c, WifiManager.NETWORK_STATE_CHANGED_ACTION, "WifiContext");
+    public WifiObserver(Context c) {
+        super(c, WifiManager.NETWORK_STATE_CHANGED_ACTION, "WifiObserver");
         mWifiManager = (WifiManager) c.getSystemService(Context.WIFI_SERVICE);
     }
 
