@@ -26,10 +26,10 @@ import android.widget.TextView;
 import java.util.Map;
 
 import uk.ac.mdx.cs.ie.acontextlib.IContextReceiver;
-import uk.ac.mdx.cs.ie.acontextlib.hardware.BatteryContext;
-import uk.ac.mdx.cs.ie.acontextlib.hardware.GPSIndoorOutdoorContext;
-import uk.ac.mdx.cs.ie.acontextlib.hardware.LightContext;
-import uk.ac.mdx.cs.ie.acontextlib.hardware.StepCounter;
+import uk.ac.mdx.cs.ie.acontextlib.hardware.BatteryObserver;
+import uk.ac.mdx.cs.ie.acontextlib.hardware.GPSIndoorOutdoorObserver;
+import uk.ac.mdx.cs.ie.acontextlib.hardware.LightObserver;
+import uk.ac.mdx.cs.ie.acontextlib.hardware.StepCounterObserver;
 
 /**
  * Sample Activity to demonstrate context components.
@@ -38,10 +38,10 @@ import uk.ac.mdx.cs.ie.acontextlib.hardware.StepCounter;
  */
 public class MainActivity extends Activity implements IContextReceiver {
 
-    private LightContext mLightContext;
-    private BatteryContext mBatteryContext;
-    private GPSIndoorOutdoorContext mIndoorContext;
-    private StepCounter mStepCounter;
+    private LightObserver mLightContext;
+    private BatteryObserver mBatteryContext;
+    private GPSIndoorOutdoorObserver mIndoorContext;
+    private StepCounterObserver mStepCounter;
     private Context mContext;
     private TextView mLightLevel;
     private TextView mBatteryLevel;
@@ -59,10 +59,10 @@ public class MainActivity extends Activity implements IContextReceiver {
 
 
         mContext = getApplicationContext();
-        mLightContext = new LightContext(mContext);
-        mBatteryContext = new BatteryContext(mContext);
-        mIndoorContext = new GPSIndoorOutdoorContext(mContext);
-        mStepCounter = new StepCounter(mContext);
+        mLightContext = new LightObserver(mContext);
+        mBatteryContext = new BatteryObserver(mContext);
+        mIndoorContext = new GPSIndoorOutdoorObserver(mContext);
+        mStepCounter = new StepCounterObserver(mContext);
 
 
         mLightContext.addContextReceiver(this);
@@ -127,11 +127,11 @@ public class MainActivity extends Activity implements IContextReceiver {
 
     @Override
     public void newContextValue(String name, final long value) {
-        if (name.equals(LightContext.RECEIVER_LIGHT)) {
+        if (name.equals(LightObserver.RECEIVER_LIGHT)) {
             mLightLevel.setText(String.valueOf(value));
-        } else if (name.equals(BatteryContext.RECEIVER_BATTERY)) {
+        } else if (name.equals(BatteryObserver.RECEIVER_BATTERY)) {
             mBatteryLevel.setText(String.valueOf(value));
-        } else if (name.equals(StepCounter.RECEIVER_STEPS)) {
+        } else if (name.equals(StepCounterObserver.RECEIVER_STEPS)) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -151,7 +151,7 @@ public class MainActivity extends Activity implements IContextReceiver {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (name.equals(GPSIndoorOutdoorContext.RECEIVER_INDOOR_OUTDOOR)) {
+                if (name.equals(GPSIndoorOutdoorObserver.RECEIVER_INDOOR_OUTDOOR)) {
                     mIndoorStatus.setText(String.valueOf(value));
                 }
             }
