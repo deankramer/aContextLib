@@ -23,28 +23,28 @@ import android.hardware.SensorManager;
 import uk.ac.mdx.cs.ie.acontextlib.SensorObserver;
 
 /**
- * Gets Ambient Temperature
+ * Gets Relative Humidity
  *
  * @author Dean Kramer <deankramer99@gmail.com>
  */
 
-public class TemperatureObserver extends SensorObserver {
+public class RelativeHumidityObserver extends SensorObserver {
 
-    private int mTemperatureValue;
-    public static final String RECEIVER_TEMPERATURE = "sensor.ambient_temperature";
+    private int mHumidityValue;
+    public static final String RECEIVER_RELATIVE_HUMIDITY = "sensor.relative_humidity";
 
-    public TemperatureObserver(Context c) {
-        super(c, Sensor.TYPE_AMBIENT_TEMPERATURE, SensorManager.SENSOR_DELAY_NORMAL, "TemperatureObserver");
+    public RelativeHumidityObserver(Context c) {
+        super(c, Sensor.TYPE_RELATIVE_HUMIDITY, SensorManager.SENSOR_DELAY_NORMAL, "RelativeHumidityObserver");
     }
 
     @Override
     protected void checkContext(float[] values) {
         int value = Math.round(values[0]);
 
-        if (value != mTemperatureValue) {
-            mTemperatureValue = value;
+        if (value != mHumidityValue) {
+            mHumidityValue = value;
 
-            sendToContextReceivers(RECEIVER_TEMPERATURE, value);
+            sendToContextReceivers(RECEIVER_RELATIVE_HUMIDITY, mHumidityValue);
         }
     }
 }
