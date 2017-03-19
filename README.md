@@ -1,6 +1,8 @@
 # aContextLib
 An Android specific software library developed for developers to more easily, and quickly use Android sensors and other data sources in a unified way. This library was started for the EU Project, POSEIDON (http://www.poseidon-project.org). This library is also used in the POSEIDON-Context Context-awareness reasoner.
 
+Now, while I am no longer a Middlesex University employee, I continue to add to this library as a hobby, and are open to new ideas to improve it.
+
 ## Developer Instructions
 * see [INSTRUCTIONS](https://github.com/deankramer/aContextLib/blob/master/INSTRUCTIONS.md) file
 
@@ -14,4 +16,4 @@ To develop aContextLib, a number of other libraries was used including:
 
 ###Developer Contact
 * author: Dean Kramer
-* email: d.kramer@mdx.ac.uk
+* email: deankramer99@gmail.com
