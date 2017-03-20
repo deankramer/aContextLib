@@ -14,6 +14,6 @@ To develop aContextLib, a number of other libraries was used including:
 * [Android Annotations Support Library](https://developer.android.com/reference/android/support/annotation/package-summary.html)
 * [PermissionsEverywhere](https://github.com/kaknazaveshtakipishi/PermissionEverywhere)
 
-###Developer Contact
+### Developer Contact
 * author: Dean Kramer
 * email: deankramer99@gmail.com
