@@ -16,18 +16,15 @@
 
 package uk.ac.mdx.cs.ie.acontextlib;
 
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
-import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.os.Build;
-import android.os.Handler;
 import android.support.annotation.CallSuper;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
@@ -36,33 +33,35 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import uk.ac.mdx.cs.ie.acontextlib.utility.BTScanner;
+import uk.ac.mdx.cs.ie.acontextlib.utility.PostLolliBTScanner;
+import uk.ac.mdx.cs.ie.acontextlib.utility.PreLolliBTScanner;
+
 /**
- * Abstract class for Bluetooth LE Devices
+ * Abstract class for Bluetooth LE Devices on Pre Lollipop
  *
  * @author Dean Kramer <d.kramer@mdx.ac.uk>
  */
 @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public abstract class BluetoothLEObserver extends PushObserver {
 
-    private static final long SCAN_PERIOD = 10000;
-    private BluetoothAdapter mBluetoothAdapter;
     private BluetoothGatt mBluetoothGatt;
-    private Handler mHandler = new Handler();
-    private boolean mScanning;
     private ArrayList<UUID> mInterestedServices;
     private ArrayList<UUID> mInterestedMeasurements;
     private String mDeviceID;
     private UUID mPhoneID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
     private static final String LOG_TAG = "BluetoothLEObserver";
-    private boolean mConnectRetry = false;
+    private BTScanner mScanner;
 
     public BluetoothLEObserver(Context c) {
 
         super(c);
 
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) c.getSystemService(Context.BLUETOOTH_SERVICE);
-        mBluetoothAdapter = bluetoothManager.getAdapter();
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mScanner = new PostLolliBTScanner(c, this, mLeScanCallback);
+        } else {
+            mScanner = new PreLolliBTScanner(c, this, mLeScanCallback);
+        }
     }
 
     public BluetoothLEObserver(Context c, UUID service,
@@ -88,6 +87,14 @@ public abstract class BluetoothLEObserver extends PushObserver {
 
     }
 
+    public boolean hasGatt() {
+        if (mBluetoothGatt == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     @Override
     public boolean setContextParameters(HashMap<String, Object> parameters) {
         if (super.setContextParameters(parameters)) {
@@ -97,40 +104,10 @@ public abstract class BluetoothLEObserver extends PushObserver {
         }
     }
 
-    public void setConnectRetry(boolean retry) {
-        mConnectRetry = retry;
-    }
-
     public void setDeviceID(String device) {
         mDeviceID = device;
     }
 
-    private void scanForLeDevice(final boolean enable) {
-        if (enable) {
-
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mScanning = false;
-                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
-
-                    if (mBluetoothGatt == null && mConnectRetry) {
-                        connectionChange(false);
-                        scanForLeDevice(enable);
-                    } else {
-                        connectionChange(true);
-                    }
-
-                }
-            }, SCAN_PERIOD);
-
-            mScanning = true;
-            mBluetoothAdapter.startLeScan(mLeScanCallback);
-        } else {
-            mScanning = false;
-            mBluetoothAdapter.stopLeScan(mLeScanCallback);
-        }
-    }
 
     @CallSuper
     @Override
@@ -144,11 +121,11 @@ public abstract class BluetoothLEObserver extends PushObserver {
             return false;
         }
 
-        if (!mBluetoothAdapter.isEnabled() || mDeviceID.isEmpty()) {
+        if (!mScanner.isEnabled() || mDeviceID.isEmpty()) {
             return false;
         }
 
-        scanForLeDevice(true);
+        mScanner.scanForLeDevice(true);
         mIsRunning = true;
 
         return true;
@@ -176,7 +153,7 @@ public abstract class BluetoothLEObserver extends PushObserver {
                 return false;
             }
 
-            scanForLeDevice(false);
+            mScanner.scanForLeDevice(false);
 
             mIsRunning = false;
 
@@ -189,15 +166,19 @@ public abstract class BluetoothLEObserver extends PushObserver {
         }
     }
 
-    private BluetoothAdapter.LeScanCallback mLeScanCallback =
-            new BluetoothAdapter.LeScanCallback() {
-                @Override
-                public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
-                    if (device.getAddress().equals(mDeviceID)) {
-                        mBluetoothGatt = device.connectGatt(mContext, false, mGattCallback);
-                    }
-                }
-            };
+    private BTScanner.BTScannerCallback mLeScanCallback = new BTScanner.BTScannerCallback() {
+        @Override
+        public void foundDevice(BluetoothDevice device, int rssi, byte[] scanRecord) {
+            if (device.getAddress().equals(mDeviceID)) {
+                mBluetoothGatt = device.connectGatt(mContext, false, mGattCallback);
+            }
+        }
+
+        @Override
+        public void connectionChange(boolean connected) {
+
+        }
+    };
 
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
 
