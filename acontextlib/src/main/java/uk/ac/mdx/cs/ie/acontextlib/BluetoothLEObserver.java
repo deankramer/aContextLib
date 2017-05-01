@@ -176,7 +176,7 @@ public abstract class BluetoothLEObserver extends PushObserver {
 
         @Override
         public void connectionChange(boolean connected) {
-
+            BluetoothLEObserver.this.connectionChange(connected);
         }
     };
 
